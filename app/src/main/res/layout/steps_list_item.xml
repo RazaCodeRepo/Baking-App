@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/padding_ten"
+    android:paddingBottom="@dimen/padding_twenty"
+    android:paddingTop="@dimen/padding_twenty">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tv_step_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:text="@string/step_text"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_step_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textAppearance="?android:textAppearanceLarge" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_step_desc"
+        android:layout_width="@dimen/dimen_twofifty"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="@dimen/padding_twenty"
+        android:textStyle="italic"
+        android:textColor="@color/colorWhite"/>
+
+    <ImageView
+        android:id="@+id/play_button"
+        android:layout_width="@dimen/dimen_thirty"
+        android:layout_height="@dimen/dimen_thirty"
+        android:src="@drawable/play_button"
+        android:paddingLeft="@dimen/padding_five"/>
+
+
+</LinearLayout>

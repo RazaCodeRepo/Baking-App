@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.android.bakingapp.activities.RecipeDetailActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_two"
+        android:background="@color/colorBlack"
+        android:paddingTop="@dimen/padding_fifteen"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:text="@string/ingredient_tag"
+        android:paddingLeft="@dimen/padding_twenty"
+        android:textColor="@color/colorBlack"
+        android:background="@color/colorRed"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_two"
+        android:background="@color/colorBlack"/>
+
+    <FrameLayout
+        android:id="@+id/ingredient_steps_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_zero"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_two"
+        android:background="@color/colorBlack"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:text="@string/steps_tag"
+        android:paddingLeft="@dimen/padding_twenty"
+        android:textColor="@color/colorBlack"
+        android:background="@color/colorRed"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_two"
+        android:background="@color/colorBlack"/>
+
+    <FrameLayout
+        android:id="@+id/steps_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_zero"
+        android:layout_weight="1"/>
+
+</LinearLayout>

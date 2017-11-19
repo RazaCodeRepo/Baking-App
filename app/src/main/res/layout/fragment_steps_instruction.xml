@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_stepsInstructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textStyle="italic"
+        android:paddingLeft="@dimen/padding_twenty"
+        android:paddingTop="@dimen/padding_twenty"
+        android:paddingBottom="@dimen/padding_twenty"
+        android:background="@color/colorLightBlue"/>
+
+</LinearLayout>

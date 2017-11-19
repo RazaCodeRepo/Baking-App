@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.android.bakingapp.activities.StepDetailActivity">
+
+    <FrameLayout
+        android:id="@+id/videoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <FrameLayout
+        android:id="@+id/instructionContainer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_zero"
+        android:layout_weight="1"
+        android:paddingTop="@dimen/padding_ten"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_previousStep"
+            android:layout_width="@dimen/dimen_zero"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/previous_step"/>
+
+        <Button
+            android:id="@+id/btn_nextStep"
+            android:layout_width="@dimen/dimen_zero"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/next_step"/>
+
+    </LinearLayout>
+
+</LinearLayout>

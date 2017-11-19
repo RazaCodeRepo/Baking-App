@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/ingredient_list_item">
+
+    <TextView
+        android:id="@+id/tv_ing_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
+        android:paddingLeft="@dimen/padding_twenty"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/padding_twenty"
+        android:paddingBottom="@dimen/padding_ten">
+
+        <TextView
+            android:id="@+id/tv_ing_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold|italic"/>
+
+        <TextView
+            android:id="@+id/tv_ing_metric"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:paddingLeft="@dimen/padding_ten"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold|italic"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
