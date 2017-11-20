@@ -32,6 +32,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,10 +48,12 @@ public class VideoDisplayFragment extends Fragment {
 
     private SimpleExoPlayer simpleExoPlayer;
     @BindView(R.id.playerView) SimpleExoPlayerView simpleExoPlayerView;
-    private static MediaSessionCompat mMediaSession;
-    private PlaybackStateCompat.Builder mStateBuilder;
-    private NotificationManager mNotificationManager;
-    private static List<Step> steps;
+
+    private List<Step> steps;
+    private int itemIndex;
+
+    private static final String VIDEO_FRAGMENT_STEPS_INSTANCE_KEY ="stepslist";
+    private static final String VIDEO_FRAGMENT_INDEX_INSTANCE_KEY ="itemindex";
 
 
     public VideoDisplayFragment(){}
@@ -63,19 +66,26 @@ public class VideoDisplayFragment extends Fragment {
 
         simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.default_image));
 
-
-        Bundle bundle = getArguments();
-        if(bundle != null){
-            int itemIndex = bundle.getInt("STEP_INDEX_ACTIVITY");
-            List<Step> steps = bundle.getParcelableArrayList("STEP_LIST_ACTIVITY");
+        if(savedInstanceState == null){
+            Bundle bundle = getArguments();
+            if(bundle != null){
+                itemIndex = bundle.getInt("STEP_INDEX_ACTIVITY");
+                steps = bundle.getParcelableArrayList("STEP_LIST_ACTIVITY");
+                Step temp = steps.get(itemIndex);
+                String videoUrl = temp.getStep_videoURL();
+                initializePlayer(Uri.parse(videoUrl));
+            } else {
+                Intent intent = getActivity().getIntent();
+                itemIndex = intent.getIntExtra("step_index", 0);
+                steps = intent.getParcelableArrayListExtra("step_list");
+                initializePlayer(Uri.parse(steps.get(itemIndex).getStep_videoURL()));
+            }
+        } else{
+            steps = savedInstanceState.getParcelableArrayList(VIDEO_FRAGMENT_STEPS_INSTANCE_KEY);
+            itemIndex = savedInstanceState.getInt(VIDEO_FRAGMENT_INDEX_INSTANCE_KEY);
             Step temp = steps.get(itemIndex);
             String videoUrl = temp.getStep_videoURL();
             initializePlayer(Uri.parse(videoUrl));
-        } else {
-            Intent intent = getActivity().getIntent();
-            int itemClicked = intent.getIntExtra("step_index", 0);
-            List<Step> steps = intent.getParcelableArrayListExtra("step_list");
-            initializePlayer(Uri.parse(steps.get(itemClicked).getStep_videoURL()));
         }
 
         return rootView;
@@ -104,9 +114,16 @@ public class VideoDisplayFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onPause() {
+        super.onPause();
         releasePlayer();
     }
+
+        @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(VIDEO_FRAGMENT_STEPS_INSTANCE_KEY, (ArrayList)steps);
+        outState.putInt(VIDEO_FRAGMENT_INDEX_INSTANCE_KEY, itemIndex );
+    }
+
 
 }

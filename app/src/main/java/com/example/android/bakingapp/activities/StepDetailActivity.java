@@ -80,7 +80,7 @@ public class StepDetailActivity extends AppCompatActivity implements StepsListFr
                 newIndex = newIndex + 1;
                 if(newIndex < 0){
                     Toast.makeText(StepDetailActivity.this, "Item already at 0", Toast.LENGTH_SHORT).show();
-                } else if(newIndex > stepsSize){
+                } else if(newIndex > stepsSize -1){
                     Toast.makeText(StepDetailActivity.this, "No more Steps", Toast.LENGTH_SHORT).show();
                 } else {
 
