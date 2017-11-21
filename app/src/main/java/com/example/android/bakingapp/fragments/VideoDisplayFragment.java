@@ -52,8 +52,8 @@ public class VideoDisplayFragment extends Fragment {
     private List<Step> steps;
     private int itemIndex;
 
-    private static final String VIDEO_FRAGMENT_STEPS_INSTANCE_KEY ="stepslist";
-    private static final String VIDEO_FRAGMENT_INDEX_INSTANCE_KEY ="itemindex";
+    private static final String VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY ="stepslist";
+    private static final String VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY ="itemindex";
 
 
     public VideoDisplayFragment(){}
@@ -81,8 +81,8 @@ public class VideoDisplayFragment extends Fragment {
                 initializePlayer(Uri.parse(steps.get(itemIndex).getStep_videoURL()));
             }
         } else{
-            steps = savedInstanceState.getParcelableArrayList(VIDEO_FRAGMENT_STEPS_INSTANCE_KEY);
-            itemIndex = savedInstanceState.getInt(VIDEO_FRAGMENT_INDEX_INSTANCE_KEY);
+            steps = savedInstanceState.getParcelableArrayList(VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY);
+            itemIndex = savedInstanceState.getInt(VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY);
             Step temp = steps.get(itemIndex);
             String videoUrl = temp.getStep_videoURL();
             initializePlayer(Uri.parse(videoUrl));
@@ -121,8 +121,8 @@ public class VideoDisplayFragment extends Fragment {
 
         @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(VIDEO_FRAGMENT_STEPS_INSTANCE_KEY, (ArrayList)steps);
-        outState.putInt(VIDEO_FRAGMENT_INDEX_INSTANCE_KEY, itemIndex );
+        outState.putParcelableArrayList(VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY, (ArrayList)steps);
+        outState.putInt(VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY, itemIndex );
     }
 
 

@@ -33,11 +33,10 @@ public class StepInstructionFragment extends Fragment {
 
     @BindView(R.id.tv_stepsInstructions) TextView stepsInstructions;
 
-    private static final String INSTRUCTION_FRAGMENT_STEPS_INSTANCE_KEY ="instructionlist";
-    private static final String INSTRUCTION_FRAGMENT_INDEX_INSTANCE_KEY ="itemindex";
+    private static final String INSTRUCTION_FRAGMENT_CLASS_STEPS_INSTANCE_KEY ="instructionlist";
+    private static final String INSTRUCTION_FRAGMENT_CLASS_INDEX_INSTANCE_KEY ="itemindex";
 
     private int itemIndex;
-
 
     public StepInstructionFragment(){}
 
@@ -63,8 +62,8 @@ public class StepInstructionFragment extends Fragment {
 
             }
         } else{
-            steps = savedInstanceState.getParcelableArrayList(INSTRUCTION_FRAGMENT_STEPS_INSTANCE_KEY);
-            itemIndex = savedInstanceState.getInt(INSTRUCTION_FRAGMENT_INDEX_INSTANCE_KEY);
+            steps = savedInstanceState.getParcelableArrayList(INSTRUCTION_FRAGMENT_CLASS_STEPS_INSTANCE_KEY);
+            itemIndex = savedInstanceState.getInt(INSTRUCTION_FRAGMENT_CLASS_INDEX_INSTANCE_KEY);
             Step temp = steps.get(itemIndex);
             stepsInstructions.setText(temp.getStep_desc());
         }
@@ -75,7 +74,7 @@ public class StepInstructionFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(INSTRUCTION_FRAGMENT_STEPS_INSTANCE_KEY, (ArrayList)steps);
-        outState.putInt(INSTRUCTION_FRAGMENT_INDEX_INSTANCE_KEY, itemIndex );
+        outState.putParcelableArrayList(INSTRUCTION_FRAGMENT_CLASS_STEPS_INSTANCE_KEY, (ArrayList)steps);
+        outState.putInt(INSTRUCTION_FRAGMENT_CLASS_INDEX_INSTANCE_KEY, itemIndex );
     }
 }

@@ -1,6 +1,7 @@
 package com.example.android.bakingapp.activities;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StepDetailActivity extends AppCompatActivity implements StepsListFragment.OnStepItemClickListener {
+public class StepDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "StepDetailActivity";
 
@@ -32,45 +33,94 @@ public class StepDetailActivity extends AppCompatActivity implements StepsListFr
     private static int newIndex;
     private boolean fromActivity;
 
+    FragmentManager fragmentManager;
 
+    VideoDisplayFragment videoDisplayFragment;
+    StepInstructionFragment stepInstructionFragment;
+
+    int itemClicked;
+    List<Step> stepsList;
+    int stepsSize;
+
+    private static final String INSTRUCTION_FRAGMENT="instruction";
+    private static final String VIDEO_FRAGMENT ="video";
+    private static final String STEPDETAIL_LIST = "stepslist";
+    private static final String ITEM_INDEX = "itemIndex";
+    private static final String NEW_INDEX = "newIndex";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
         ButterKnife.bind(this);
-        fromActivity = true;
+       // fromActivity = true;
+        fragmentManager = getSupportFragmentManager();
+
+        if(savedInstanceState == null){
+            videoDisplayFragment = new VideoDisplayFragment();
+
+            fragmentManager.beginTransaction()
+                    .add(R.id.videoContainer, videoDisplayFragment)
+                    .commit();
+
+            stepInstructionFragment = new StepInstructionFragment();
+
+            fragmentManager.beginTransaction()
+                    .add(R.id.instructionContainer, stepInstructionFragment)
+                    .commit();
 
 
-        final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        final VideoDisplayFragment videoDisplayFragment = new VideoDisplayFragment();
+            Intent intent = getIntent();
 
-        fragmentManager.beginTransaction()
-                .add(R.id.videoContainer, videoDisplayFragment)
-                .commit();
+            itemClicked = intent.getIntExtra("step_index", -1);
 
-        StepInstructionFragment stepInstructionFragment = new StepInstructionFragment();
-
-        fragmentManager.beginTransaction()
-                .add(R.id.instructionContainer, stepInstructionFragment)
-                .commit();
+            stepsList = intent.getParcelableArrayListExtra("step_list");
 
 
+            if(itemClicked == -1){
+                Toast.makeText(this, "itemClicked is -1", Toast.LENGTH_SHORT).show();
+            }
 
-        Intent intent = getIntent();
-
-        int itemClicked = intent.getIntExtra("step_index", -1);
-
-        final List<Step>stepsList = intent.getParcelableArrayListExtra("step_list");
-
-        final int stepsSize = stepsList.size();
-
-        if(itemClicked == -1){
-            Toast.makeText(this, "itemClicked is -1", Toast.LENGTH_SHORT).show();
+            //newIndex = itemClicked;
+        } else {
+           videoDisplayFragment = (VideoDisplayFragment)fragmentManager.getFragment(savedInstanceState, VIDEO_FRAGMENT);
+           stepInstructionFragment = (StepInstructionFragment)fragmentManager.getFragment(savedInstanceState, INSTRUCTION_FRAGMENT);
+           stepsList = savedInstanceState.getParcelableArrayList(STEPDETAIL_LIST);
+           itemClicked = savedInstanceState.getInt(ITEM_INDEX);
         }
 
+//
+//        videoDisplayFragment = new VideoDisplayFragment();
+//
+//        fragmentManager.beginTransaction()
+//                .add(R.id.videoContainer, videoDisplayFragment)
+//                .commit();
+//
+//        stepInstructionFragment = new StepInstructionFragment();
+//
+//        fragmentManager.beginTransaction()
+//                .add(R.id.instructionContainer, stepInstructionFragment)
+//                .commit();
+//
+//
+//
+//        Intent intent = getIntent();
+//
+//        itemClicked = intent.getIntExtra("step_index", -1);
+//
+//        stepsList = intent.getParcelableArrayListExtra("step_list");
+//
+//        stepsSize = stepsList.size();
+//
+//        if(itemClicked == -1){
+//            Toast.makeText(this, "itemClicked is -1", Toast.LENGTH_SHORT).show();
+//        }
+//
         newIndex = itemClicked;
+
+        stepsSize = stepsList.size();
+
 
         nextStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,13 +184,14 @@ public class StepDetailActivity extends AppCompatActivity implements StepsListFr
         });
     }
 
-
-
     @Override
-    public void onStepSelected(int itemIndex, List<Step> stepsList) {
-        if(TextUtils.isEmpty(stepsList.get(itemIndex).getStep_videoURL())){
-            FrameLayout videoContainer = (FrameLayout)findViewById(R.id.videoContainer);
-            videoContainer.setVisibility(View.INVISIBLE);
-        }
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        fragmentManager.putFragment(outState, VIDEO_FRAGMENT, videoDisplayFragment );
+        fragmentManager.putFragment(outState, INSTRUCTION_FRAGMENT, stepInstructionFragment);
+        outState.putParcelableArrayList(STEPDETAIL_LIST, (ArrayList)stepsList);
+        outState.putInt(ITEM_INDEX, itemClicked);
+        //outState.putInt(NEW_INDEX, newIndex);
+
     }
 }
