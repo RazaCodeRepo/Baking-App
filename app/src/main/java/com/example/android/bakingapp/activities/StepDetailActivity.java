@@ -168,16 +168,25 @@ public class StepDetailActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putInt("STEP_INDEX_ACTIVITY", newIndex);
                     bundle.putParcelableArrayList("STEP_LIST_ACTIVITY", (ArrayList)stepsList);
-                    VideoDisplayFragment replaceVideoDisplayFragment = new VideoDisplayFragment();
-                    replaceVideoDisplayFragment.setArguments(bundle);
+//                    VideoDisplayFragment replaceVideoDisplayFragment = new VideoDisplayFragment();
+//                    replaceVideoDisplayFragment.setArguments(bundle);
+//                    fragmentManager.beginTransaction()
+//                            .replace(R.id.videoContainer, replaceVideoDisplayFragment)
+//                            .commit();
+                    videoDisplayFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
-                            .replace(R.id.videoContainer, replaceVideoDisplayFragment)
+                            .replace(R.id.videoContainer, videoDisplayFragment)
                             .commit();
 
-                    StepInstructionFragment replaceStepInstructionFragment = new StepInstructionFragment();
-                    replaceStepInstructionFragment.setArguments(bundle);
+//                    StepInstructionFragment replaceStepInstructionFragment = new StepInstructionFragment();
+//                    replaceStepInstructionFragment.setArguments(bundle);
+//                    fragmentManager.beginTransaction()
+//                            .replace(R.id.instructionContainer, replaceStepInstructionFragment)
+//                            .commit();
+
+                    stepInstructionFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
-                            .replace(R.id.instructionContainer, replaceStepInstructionFragment)
+                            .replace(R.id.instructionContainer, stepInstructionFragment)
                             .commit();
                 }
             }
@@ -191,7 +200,5 @@ public class StepDetailActivity extends AppCompatActivity {
         fragmentManager.putFragment(outState, INSTRUCTION_FRAGMENT, stepInstructionFragment);
         outState.putParcelableArrayList(STEPDETAIL_LIST, (ArrayList)stepsList);
         outState.putInt(ITEM_INDEX, itemClicked);
-        //outState.putInt(NEW_INDEX, newIndex);
-
     }
 }
