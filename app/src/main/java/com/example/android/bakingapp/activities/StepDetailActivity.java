@@ -139,16 +139,26 @@ public class StepDetailActivity extends AppCompatActivity {
                     bundle.putParcelableArrayList("STEP_LIST_ACTIVITY", (ArrayList)stepsList);
 
 
-                    VideoDisplayFragment replaceVideoDisplayFragment = new VideoDisplayFragment();
-                    replaceVideoDisplayFragment.setArguments(bundle);
+//                    VideoDisplayFragment replaceVideoDisplayFragment = new VideoDisplayFragment();
+//                    replaceVideoDisplayFragment.setArguments(bundle);
+//                    fragmentManager.beginTransaction()
+//                            .replace(R.id.videoContainer, replaceVideoDisplayFragment)
+//                            .commit();
+                    videoDisplayFragment = new VideoDisplayFragment();
+                    videoDisplayFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
-                            .replace(R.id.videoContainer, replaceVideoDisplayFragment)
+                            .replace(R.id.videoContainer, videoDisplayFragment)
                             .commit();
 
-                    StepInstructionFragment replaceStepInstructionFragment = new StepInstructionFragment();
-                    replaceStepInstructionFragment.setArguments(bundle);
+//                    StepInstructionFragment replaceStepInstructionFragment = new StepInstructionFragment();
+//                    replaceStepInstructionFragment.setArguments(bundle);
+//                    fragmentManager.beginTransaction()
+//                            .replace(R.id.instructionContainer, replaceStepInstructionFragment)
+//                            .commit();
+                    stepInstructionFragment = new StepInstructionFragment();
+                    stepInstructionFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
-                            .replace(R.id.instructionContainer, replaceStepInstructionFragment)
+                            .replace(R.id.instructionContainer, stepInstructionFragment)
                             .commit();
                 }
 
@@ -173,6 +183,7 @@ public class StepDetailActivity extends AppCompatActivity {
 //                    fragmentManager.beginTransaction()
 //                            .replace(R.id.videoContainer, replaceVideoDisplayFragment)
 //                            .commit();
+                    videoDisplayFragment = new VideoDisplayFragment();
                     videoDisplayFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
                             .replace(R.id.videoContainer, videoDisplayFragment)
@@ -183,7 +194,7 @@ public class StepDetailActivity extends AppCompatActivity {
 //                    fragmentManager.beginTransaction()
 //                            .replace(R.id.instructionContainer, replaceStepInstructionFragment)
 //                            .commit();
-
+                    stepInstructionFragment = new StepInstructionFragment();
                     stepInstructionFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
                             .replace(R.id.instructionContainer, stepInstructionFragment)
