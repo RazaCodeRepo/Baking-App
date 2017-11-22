@@ -53,7 +53,7 @@ public class StepDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
         ButterKnife.bind(this);
-       // fromActivity = true;
+
         fragmentManager = getSupportFragmentManager();
 
         if(savedInstanceState == null){
@@ -82,7 +82,7 @@ public class StepDetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "itemClicked is -1", Toast.LENGTH_SHORT).show();
             }
 
-            //newIndex = itemClicked;
+
         } else {
            videoDisplayFragment = (VideoDisplayFragment)fragmentManager.getFragment(savedInstanceState, VIDEO_FRAGMENT);
            stepInstructionFragment = (StepInstructionFragment)fragmentManager.getFragment(savedInstanceState, INSTRUCTION_FRAGMENT);
@@ -90,37 +90,9 @@ public class StepDetailActivity extends AppCompatActivity {
            itemClicked = savedInstanceState.getInt(ITEM_INDEX);
         }
 
-//
-//        videoDisplayFragment = new VideoDisplayFragment();
-//
-//        fragmentManager.beginTransaction()
-//                .add(R.id.videoContainer, videoDisplayFragment)
-//                .commit();
-//
-//        stepInstructionFragment = new StepInstructionFragment();
-//
-//        fragmentManager.beginTransaction()
-//                .add(R.id.instructionContainer, stepInstructionFragment)
-//                .commit();
-//
-//
-//
-//        Intent intent = getIntent();
-//
-//        itemClicked = intent.getIntExtra("step_index", -1);
-//
-//        stepsList = intent.getParcelableArrayListExtra("step_list");
-//
-//        stepsSize = stepsList.size();
-//
-//        if(itemClicked == -1){
-//            Toast.makeText(this, "itemClicked is -1", Toast.LENGTH_SHORT).show();
-//        }
-//
         newIndex = itemClicked;
 
         stepsSize = stepsList.size();
-
 
         nextStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,22 +111,13 @@ public class StepDetailActivity extends AppCompatActivity {
                     bundle.putParcelableArrayList("STEP_LIST_ACTIVITY", (ArrayList)stepsList);
 
 
-//                    VideoDisplayFragment replaceVideoDisplayFragment = new VideoDisplayFragment();
-//                    replaceVideoDisplayFragment.setArguments(bundle);
-//                    fragmentManager.beginTransaction()
-//                            .replace(R.id.videoContainer, replaceVideoDisplayFragment)
-//                            .commit();
                     videoDisplayFragment = new VideoDisplayFragment();
                     videoDisplayFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
                             .replace(R.id.videoContainer, videoDisplayFragment)
                             .commit();
 
-//                    StepInstructionFragment replaceStepInstructionFragment = new StepInstructionFragment();
-//                    replaceStepInstructionFragment.setArguments(bundle);
-//                    fragmentManager.beginTransaction()
-//                            .replace(R.id.instructionContainer, replaceStepInstructionFragment)
-//                            .commit();
+
                     stepInstructionFragment = new StepInstructionFragment();
                     stepInstructionFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
@@ -178,22 +141,14 @@ public class StepDetailActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putInt("STEP_INDEX_ACTIVITY", newIndex);
                     bundle.putParcelableArrayList("STEP_LIST_ACTIVITY", (ArrayList)stepsList);
-//                    VideoDisplayFragment replaceVideoDisplayFragment = new VideoDisplayFragment();
-//                    replaceVideoDisplayFragment.setArguments(bundle);
-//                    fragmentManager.beginTransaction()
-//                            .replace(R.id.videoContainer, replaceVideoDisplayFragment)
-//                            .commit();
+
                     videoDisplayFragment = new VideoDisplayFragment();
                     videoDisplayFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
                             .replace(R.id.videoContainer, videoDisplayFragment)
                             .commit();
 
-//                    StepInstructionFragment replaceStepInstructionFragment = new StepInstructionFragment();
-//                    replaceStepInstructionFragment.setArguments(bundle);
-//                    fragmentManager.beginTransaction()
-//                            .replace(R.id.instructionContainer, replaceStepInstructionFragment)
-//                            .commit();
+
                     stepInstructionFragment = new StepInstructionFragment();
                     stepInstructionFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()

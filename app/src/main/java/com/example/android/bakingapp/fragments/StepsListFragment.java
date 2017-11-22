@@ -78,6 +78,15 @@ public class StepsListFragment extends Fragment implements StepRecyclerAdapter.S
             recyclerView.setAdapter(mAdapter);
         } else{
             steps = savedInstanceState.getParcelableArrayList("SAVEDINSTANCE_STEPS");
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(layoutManager);
+
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                    layoutManager.getOrientation());
+            recyclerView.addItemDecoration(dividerItemDecoration);
+
+            StepRecyclerAdapter mAdapter = new StepRecyclerAdapter(steps, StepsListFragment.this);
+            recyclerView.setAdapter(mAdapter);
         }
 
 

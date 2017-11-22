@@ -27,7 +27,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsList
 
     public static final String TAG = "RecipeDetailActivity";
 
-
+    Fragment fragment;
     FragmentManager fragmentManager;
     boolean isTwoPane;
     private Recipe recipe;
@@ -39,7 +39,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsList
     StepInstructionFragment stepInstructionFragment;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +46,13 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsList
 
         fragmentManager = getSupportFragmentManager();
 
+
+
         if(savedInstanceState == null){
-//            Intent intent = getIntent();
-//            recipe = intent.getParcelableExtra("RECIPELISTFRAGMENT_RECIPE");
-//            steps = recipe.getRecipeSteps();
+           Intent intent = getIntent();
+            recipe = intent.getParcelableExtra("RECIPELISTFRAGMENT_RECIPE");
+            steps = recipe.getRecipeSteps();
+
             getSupportActionBar().setTitle(recipe.getRecipeName());
 
             if(findViewById(R.id.detail_linear_layout) != null){
@@ -97,57 +99,18 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsList
                         .add(R.id.steps_container, stepsListFragment)
                         .commit();
             }
-
         } else{
-            recipe = savedInstanceState.getParcelable("SAVEDINSTANCE_RECIPE");
-            steps = recipe.getRecipeSteps();
-            getSupportActionBar().setTitle(recipe.getRecipeName());
+            isTwoPane = savedInstanceState.getBoolean("TWO_PANE");
+
+            if(isTwoPane == true){
+                ingredientListFragment = (IngredientListFragment)fragmentManager.getFragment(savedInstanceState, "INGREDIENT_FRAGMENT");
+                stepsListFragment = (StepsListFragment)fragmentManager.getFragment(savedInstanceState, "STEPS_FRAGMENT");
+                videoDisplayFragment = (VideoDisplayFragment)fragmentManager.getFragment(savedInstanceState, "VIDEO_FRAGMENT");
+                stepInstructionFragment = (StepInstructionFragment)fragmentManager.getFragment(savedInstanceState, "INSTRUCTION_FRAGMENT");
+            }
         }
 
-//        if(findViewById(R.id.detail_linear_layout) != null){
-//            isTwoPane = true;
-//
-//
-//            Bundle bundle = new Bundle();
-//            bundle.putParcelableArrayList("STEP_LIST_ACTIVITY", (ArrayList)steps);
-//            bundle.putInt("STEP_INDEX_ACTIVITY", 0);
-//
-//            ingredientListFragment = new IngredientListFragment();
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.ingredient_steps_container, ingredientListFragment)
-//                    .commit();
-//
-//            stepsListFragment = new StepsListFragment();
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.steps_container, stepsListFragment)
-//                    .commit();
-//
-//            videoDisplayFragment = new VideoDisplayFragment();
-//            videoDisplayFragment.setArguments(bundle);
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.videoContainer, videoDisplayFragment)
-//                    .commit();
-//
-//            stepInstructionFragment = new StepInstructionFragment();
-//            stepInstructionFragment.setArguments(bundle);
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.instructionContainer, stepInstructionFragment)
-//                    .commit();
-//
-//
-//        } else{
-//            isTwoPane = false;
-//
-//            ingredientListFragment = new IngredientListFragment();
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.ingredient_steps_container, ingredientListFragment)
-//                    .commit();
-//
-//            stepsListFragment = new StepsListFragment();
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.steps_container, stepsListFragment)
-//                    .commit();
-//        }
+
 
     }
 
@@ -185,15 +148,14 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsList
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("SAVEDINSTANCE_RECIPE", recipe);
+        outState.putBoolean("TWO_PANE", isTwoPane);
+        fragmentManager.putFragment(outState, "INGREDIENT_FRAGMENT", ingredientListFragment);
+        fragmentManager.putFragment(outState, "VIDEO_FRAGMENT", videoDisplayFragment );
+        fragmentManager.putFragment(outState, "INSTRUCTION_FRAGMENT", stepInstructionFragment);
+        fragmentManager.putFragment(outState, "STEPS_FRAGMENT", stepsListFragment);
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        recipe = savedInstanceState.getParcelable("SAVEDINSTANCE_RECIPE");
-    }
+
 
 
 }
