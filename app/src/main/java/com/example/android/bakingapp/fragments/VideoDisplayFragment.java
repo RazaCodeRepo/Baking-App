@@ -80,11 +80,14 @@ public class VideoDisplayFragment extends Fragment {
                 String videoUrl = temp.getStep_videoURL();
                 String thumbnailUrl = temp.getStep_thumbnail();
                 if(!TextUtils.isEmpty(videoUrl)){
-                    thumbnailView.setVisibility(View.GONE);
+                    //thumbnailView.setVisibility(View.GONE);
+                    simpleExoPlayerView.setVisibility(View.VISIBLE);
                     initializePlayer(Uri.parse(videoUrl), savedInstanceState);
                 } else{
+                    thumbnailView.setVisibility(View.VISIBLE);
                     if(!TextUtils.isEmpty(thumbnailUrl)){
-                        simpleExoPlayerView.setVisibility(View.GONE);
+                        //simpleExoPlayerView.setVisibility(View.GONE);
+
                         Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
                     } else {
                         Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
@@ -100,11 +103,13 @@ public class VideoDisplayFragment extends Fragment {
                 String videoUrl = temp.getStep_videoURL();
                 String thumbnailUrl = temp.getStep_thumbnail();
                 if(!TextUtils.isEmpty(videoUrl)){
-                    thumbnailView.setVisibility(View.GONE);
+                    //thumbnailView.setVisibility(View.GONE);
+                    simpleExoPlayerView.setVisibility(View.VISIBLE);
                     initializePlayer(Uri.parse(videoUrl), savedInstanceState);
                 } else{
+                    thumbnailView.setVisibility(View.VISIBLE);
                     if(!TextUtils.isEmpty(thumbnailUrl)){
-                        simpleExoPlayerView.setVisibility(View.GONE);
+                        //simpleExoPlayerView.setVisibility(View.GONE);
                         Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
                     } else {
                         Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
@@ -118,11 +123,13 @@ public class VideoDisplayFragment extends Fragment {
             String videoUrl = temp.getStep_videoURL();
             String thumbnailUrl = temp.getStep_thumbnail();
             if(!TextUtils.isEmpty(videoUrl)){
-                thumbnailView.setVisibility(View.GONE);
+                //thumbnailView.setVisibility(View.GONE);
+                simpleExoPlayerView.setVisibility(View.VISIBLE);
                 initializePlayer(Uri.parse(videoUrl), savedInstanceState);
             } else{
+                thumbnailView.setVisibility(View.VISIBLE);
                 if(!TextUtils.isEmpty(thumbnailUrl)){
-                    simpleExoPlayerView.setVisibility(View.GONE);
+                   // simpleExoPlayerView.setVisibility(View.GONE);
                     Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
                 } else {
                     Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
