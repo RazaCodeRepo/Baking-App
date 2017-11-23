@@ -11,10 +11,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.bakingapp.R;
@@ -31,6 +33,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +51,7 @@ public class VideoDisplayFragment extends Fragment {
 
     private SimpleExoPlayer simpleExoPlayer;
     @BindView(R.id.playerView) SimpleExoPlayerView simpleExoPlayerView;
+    @BindView(R.id.thumbnail_view) ImageView thumbnailView;
 
     private List<Step> steps;
     private int itemIndex;
@@ -74,19 +78,56 @@ public class VideoDisplayFragment extends Fragment {
                 steps = bundle.getParcelableArrayList("STEP_LIST_ACTIVITY");
                 Step temp = steps.get(itemIndex);
                 String videoUrl = temp.getStep_videoURL();
-                initializePlayer(Uri.parse(videoUrl), savedInstanceState);
+                String thumbnailUrl = temp.getStep_thumbnail();
+                if(!TextUtils.isEmpty(videoUrl)){
+                    thumbnailView.setVisibility(View.GONE);
+                    initializePlayer(Uri.parse(videoUrl), savedInstanceState);
+                } else{
+                    if(!TextUtils.isEmpty(thumbnailUrl)){
+                        simpleExoPlayerView.setVisibility(View.GONE);
+                        Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
+                    } else {
+                        Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
+                    }
+
+                }
+
             } else {
                 Intent intent = getActivity().getIntent();
                 itemIndex = intent.getIntExtra("step_index", 0);
                 steps = intent.getParcelableArrayListExtra("step_list");
-                initializePlayer(Uri.parse(steps.get(itemIndex).getStep_videoURL()), savedInstanceState);
+                Step temp = steps.get(itemIndex);
+                String videoUrl = temp.getStep_videoURL();
+                String thumbnailUrl = temp.getStep_thumbnail();
+                if(!TextUtils.isEmpty(videoUrl)){
+                    thumbnailView.setVisibility(View.GONE);
+                    initializePlayer(Uri.parse(videoUrl), savedInstanceState);
+                } else{
+                    if(!TextUtils.isEmpty(thumbnailUrl)){
+                        simpleExoPlayerView.setVisibility(View.GONE);
+                        Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
+                    } else {
+                        Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
+                    }
+                }
             }
         } else{
             steps = savedInstanceState.getParcelableArrayList(VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY);
             itemIndex = savedInstanceState.getInt(VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY);
             Step temp = steps.get(itemIndex);
             String videoUrl = temp.getStep_videoURL();
-            initializePlayer(Uri.parse(videoUrl), savedInstanceState);
+            String thumbnailUrl = temp.getStep_thumbnail();
+            if(!TextUtils.isEmpty(videoUrl)){
+                thumbnailView.setVisibility(View.GONE);
+                initializePlayer(Uri.parse(videoUrl), savedInstanceState);
+            } else{
+                if(!TextUtils.isEmpty(thumbnailUrl)){
+                    simpleExoPlayerView.setVisibility(View.GONE);
+                    Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
+                } else {
+                    Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
+                }
+            }
         }
 
         return rootView;
@@ -126,10 +167,16 @@ public class VideoDisplayFragment extends Fragment {
     }
 
     private void releasePlayer() {
-        position = simpleExoPlayer.getCurrentPosition();
-        simpleExoPlayer.stop();
-        simpleExoPlayer.release();
-        simpleExoPlayer = null;
+
+        if(simpleExoPlayer != null){
+
+            position = simpleExoPlayer.getCurrentPosition();
+            simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
+        }
+
+
     }
 
     @Override
@@ -138,7 +185,13 @@ public class VideoDisplayFragment extends Fragment {
         releasePlayer();
     }
 
-        @Override
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY, (ArrayList)steps);
