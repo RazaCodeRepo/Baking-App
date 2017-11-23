@@ -107,10 +107,11 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsList
                 stepsListFragment = (StepsListFragment)fragmentManager.getFragment(savedInstanceState, "STEPS_FRAGMENT");
                 videoDisplayFragment = (VideoDisplayFragment)fragmentManager.getFragment(savedInstanceState, "VIDEO_FRAGMENT");
                 stepInstructionFragment = (StepInstructionFragment)fragmentManager.getFragment(savedInstanceState, "INSTRUCTION_FRAGMENT");
+            } else {
+                ingredientListFragment = (IngredientListFragment)fragmentManager.getFragment(savedInstanceState, "INGREDIENT_FRAGMENT");
+                stepsListFragment = (StepsListFragment)fragmentManager.getFragment(savedInstanceState, "STEPS_FRAGMENT");
             }
         }
-
-
 
     }
 
@@ -148,14 +149,19 @@ public class RecipeDetailActivity extends AppCompatActivity implements StepsList
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean("TWO_PANE", isTwoPane);
-        fragmentManager.putFragment(outState, "INGREDIENT_FRAGMENT", ingredientListFragment);
-        fragmentManager.putFragment(outState, "VIDEO_FRAGMENT", videoDisplayFragment );
-        fragmentManager.putFragment(outState, "INSTRUCTION_FRAGMENT", stepInstructionFragment);
-        fragmentManager.putFragment(outState, "STEPS_FRAGMENT", stepsListFragment);
+        super.onSaveInstanceState(outState);
+        if(isTwoPane == true){
+            outState.putBoolean("TWO_PANE", isTwoPane);
+            fragmentManager.putFragment(outState, "INGREDIENT_FRAGMENT", ingredientListFragment);
+            fragmentManager.putFragment(outState, "VIDEO_FRAGMENT", videoDisplayFragment );
+            fragmentManager.putFragment(outState, "INSTRUCTION_FRAGMENT", stepInstructionFragment);
+            fragmentManager.putFragment(outState, "STEPS_FRAGMENT", stepsListFragment);
+        } else{
+            outState.putBoolean("TWO_PANE", isTwoPane);
+            fragmentManager.putFragment(outState, "INGREDIENT_FRAGMENT", ingredientListFragment);
+            fragmentManager.putFragment(outState, "STEPS_FRAGMENT", stepsListFragment);
+        }
+
     }
-
-
-
 
 }

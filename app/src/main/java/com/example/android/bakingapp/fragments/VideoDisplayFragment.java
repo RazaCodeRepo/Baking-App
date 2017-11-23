@@ -51,6 +51,7 @@ public class VideoDisplayFragment extends Fragment {
 
     private List<Step> steps;
     private int itemIndex;
+    private long position;
 
     private static final String VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY ="stepslist";
     private static final String VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY ="itemindex";
@@ -73,41 +74,59 @@ public class VideoDisplayFragment extends Fragment {
                 steps = bundle.getParcelableArrayList("STEP_LIST_ACTIVITY");
                 Step temp = steps.get(itemIndex);
                 String videoUrl = temp.getStep_videoURL();
-                initializePlayer(Uri.parse(videoUrl));
+                initializePlayer(Uri.parse(videoUrl), savedInstanceState);
             } else {
                 Intent intent = getActivity().getIntent();
                 itemIndex = intent.getIntExtra("step_index", 0);
                 steps = intent.getParcelableArrayListExtra("step_list");
-                initializePlayer(Uri.parse(steps.get(itemIndex).getStep_videoURL()));
+                initializePlayer(Uri.parse(steps.get(itemIndex).getStep_videoURL()), savedInstanceState);
             }
         } else{
             steps = savedInstanceState.getParcelableArrayList(VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY);
             itemIndex = savedInstanceState.getInt(VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY);
             Step temp = steps.get(itemIndex);
             String videoUrl = temp.getStep_videoURL();
-            initializePlayer(Uri.parse(videoUrl));
+            initializePlayer(Uri.parse(videoUrl), savedInstanceState);
         }
 
         return rootView;
     }
 
-    private void initializePlayer(Uri uri){
-        TrackSelector trackSelector = new DefaultTrackSelector();
-        LoadControl loadControl = new DefaultLoadControl();
+    private void initializePlayer(Uri uri, Bundle instanceState){
+        if(instanceState == null){
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
 
-        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
-        simpleExoPlayerView.setPlayer(simpleExoPlayer);
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+            simpleExoPlayerView.setPlayer(simpleExoPlayer);
 
-        String userAgent = Util.getUserAgent(getActivity(), "Recipe Video");
-        MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(getActivity(), userAgent),
-                new DefaultExtractorsFactory(), null, null);
+            String userAgent = Util.getUserAgent(getActivity(), "Recipe Video");
+            MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(getActivity(), userAgent),
+                    new DefaultExtractorsFactory(), null, null);
 
-        simpleExoPlayer.prepare(mediaSource);
-        simpleExoPlayer.setPlayWhenReady(true);
+            simpleExoPlayer.prepare(mediaSource);
+            simpleExoPlayer.setPlayWhenReady(true);
+
+        } else{
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+            simpleExoPlayer.seekTo(instanceState.getLong("VIDEO_POSITION"));
+            simpleExoPlayerView.setPlayer(simpleExoPlayer);
+
+            String userAgent = Util.getUserAgent(getActivity(), "Recipe Video");
+            MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(getActivity(), userAgent),
+                    new DefaultExtractorsFactory(), null, null);
+
+            simpleExoPlayer.prepare(mediaSource);
+            simpleExoPlayer.setPlayWhenReady(true);
+        }
+
     }
 
     private void releasePlayer() {
-
+        position = simpleExoPlayer.getCurrentPosition();
         simpleExoPlayer.stop();
         simpleExoPlayer.release();
         simpleExoPlayer = null;
@@ -121,8 +140,10 @@ public class VideoDisplayFragment extends Fragment {
 
         @Override
     public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY, (ArrayList)steps);
         outState.putInt(VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY, itemIndex );
+        outState.putLong("VIDEO_POSITION", position);
     }
 
 
