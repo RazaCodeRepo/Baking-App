@@ -40,7 +40,7 @@ public class Step implements Parcelable {
     }
 
     public String getStep_thumbnail(){
-        return step_videoURL;
+        return step_thumbnail;
     }
 
     protected Step(Parcel in) {

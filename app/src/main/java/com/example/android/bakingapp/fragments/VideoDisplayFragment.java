@@ -86,8 +86,6 @@ public class VideoDisplayFragment extends Fragment {
                 } else{
                     thumbnailView.setVisibility(View.VISIBLE);
                     if(!TextUtils.isEmpty(thumbnailUrl)){
-                        //simpleExoPlayerView.setVisibility(View.GONE);
-
                         Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
                     } else {
                         Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);

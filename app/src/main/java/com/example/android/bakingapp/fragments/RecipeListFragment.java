@@ -3,6 +3,7 @@ package com.example.android.bakingapp.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -24,6 +25,8 @@ import com.example.android.bakingapp.adapters.RecipeRecyclerAdapter;
 import com.example.android.bakingapp.bake.Ingredient;
 import com.example.android.bakingapp.bake.Recipe;
 import com.example.android.bakingapp.utils.NetworkUtils;
+import com.example.android.bakingapp.widget.BakingWidgetProvider;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +125,11 @@ public class RecipeListFragment extends Fragment implements RecipeRecyclerAdapte
             if(data != null){
                 progressBar.setVisibility(View.GONE);
                 recipeList = data;
+                List<Ingredient> tempIng = recipeList.get(0).getRecipeIngredients();
+                Gson gson = new Gson();
+                String json = gson.toJson(tempIng);
+                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putString("SELECTED_INGREDIENT", json).apply();
+                BakingWidgetProvider.sendRefreshBroadcast(getContext());
                 mAdapter = new RecipeRecyclerAdapter(data, RecipeListFragment.this);
                 mRecyclerView.setAdapter(mAdapter);
             }
