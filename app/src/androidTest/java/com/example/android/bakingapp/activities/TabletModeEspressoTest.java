@@ -40,13 +40,13 @@ public class TabletModeEspressoTest {
                         childAtPosition(
                                 withClassName(is("android.widget.FrameLayout")),
                                 0)));
-        recyclerView.perform(actionOnItemAtPosition(1, click()));
+        recyclerView.perform(actionOnItemAtPosition(0, click()));
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(4967);
+            Thread.sleep(4983);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,12 +58,21 @@ public class TabletModeEspressoTest {
                                 0)));
         recyclerView2.perform(actionOnItemAtPosition(1, click()));
 
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ViewInteraction recyclerView3 = onView(
                 allOf(withId(R.id.rv_steps_list),
                         childAtPosition(
                                 withId(R.id.steps_container),
                                 0)));
-        recyclerView3.perform(actionOnItemAtPosition(2, click()));
+        recyclerView3.perform(actionOnItemAtPosition(3, click()));
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -79,7 +88,7 @@ public class TabletModeEspressoTest {
                         childAtPosition(
                                 withId(R.id.steps_container),
                                 0)));
-        recyclerView4.perform(actionOnItemAtPosition(1, click()));
+        recyclerView4.perform(actionOnItemAtPosition(6, click()));
 
     }
 

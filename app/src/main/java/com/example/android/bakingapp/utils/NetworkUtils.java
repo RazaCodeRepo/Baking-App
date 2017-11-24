@@ -176,9 +176,9 @@ public class NetworkUtils {
                     steps.add(new Step(stepId, short_desc, desc, videoURL, thumbnail));
                 }
                 int servings = recipeData.getInt("servings");
+                String image = recipeData.getString("image");
 
-
-                recipes.add(new Recipe(id, name, ingredients, steps, servings));
+                recipes.add(new Recipe(id, name, ingredients, steps, servings, image));
             }
             return recipes;
         } catch (JSONException e) {

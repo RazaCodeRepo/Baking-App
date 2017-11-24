@@ -130,7 +130,7 @@ public class RecipeListFragment extends Fragment implements RecipeRecyclerAdapte
                 String json = gson.toJson(tempIng);
                 PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putString("SELECTED_INGREDIENT", json).apply();
                 BakingWidgetProvider.sendRefreshBroadcast(getContext());
-                mAdapter = new RecipeRecyclerAdapter(data, RecipeListFragment.this);
+                mAdapter = new RecipeRecyclerAdapter(getContext(), data, RecipeListFragment.this);
                 mRecyclerView.setAdapter(mAdapter);
             }
         }

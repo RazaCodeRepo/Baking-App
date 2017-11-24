@@ -1,14 +1,14 @@
 package com.example.android.bakingapp.bake;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.android.bakingapp.bake.Ingredient;
+import com.example.android.bakingapp.bake.Step;
+
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Kontrol on 9/20/2017.
- */
 
 public class  Recipe implements Parcelable {
     private  int recipeID;
@@ -16,13 +16,15 @@ public class  Recipe implements Parcelable {
     private  List<Ingredient> recipeIngredients;
     private  List<Step> recipeSteps;
     private  int recipeServings;
+    private String imageURL;
 
-    public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps, int servings){
+    public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps, int servings, String image){
         recipeID = id;
         recipeName = name;
         recipeIngredients = ingredients;
         recipeSteps = steps;
         recipeServings = servings;
+        imageURL = image;
     }
 
 
@@ -35,7 +37,7 @@ public class  Recipe implements Parcelable {
         return recipeName;
     }
 
-    public  List<Ingredient> getRecipeIngredients(){
+    public List<Ingredient> getRecipeIngredients(){
         return recipeIngredients;
     }
 
@@ -47,7 +49,9 @@ public class  Recipe implements Parcelable {
         return recipeServings;
     }
 
-
+    public String getImageURL(){
+        return imageURL;
+    }
 
     protected Recipe(Parcel in) {
         recipeID = in.readInt();
@@ -65,6 +69,7 @@ public class  Recipe implements Parcelable {
             recipeSteps = null;
         }
         recipeServings = in.readInt();
+        imageURL = in.readString();
     }
 
     @Override
@@ -89,6 +94,7 @@ public class  Recipe implements Parcelable {
             dest.writeList(recipeSteps);
         }
         dest.writeInt(recipeServings);
+        dest.writeString(imageURL);
     }
 
     @SuppressWarnings("unused")

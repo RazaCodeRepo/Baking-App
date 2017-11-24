@@ -1,7 +1,9 @@
 package com.example.android.bakingapp.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.bake.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -24,15 +27,18 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeRecyclerAd
 
     private List<Recipe> recipeList;
 
+    Context mContext;
+
     private final ListItemClickListener mOnClickListener;
 
     public interface ListItemClickListener{
         void onListItemClickListener(int clickedItemIndex);
     }
 
-    public RecipeRecyclerAdapter(List<Recipe> mRecipeList, ListItemClickListener listener){
+    public RecipeRecyclerAdapter(Context context, List<Recipe> mRecipeList, ListItemClickListener listener){
         recipeList = mRecipeList;
         mOnClickListener = listener;
+        mContext = context;
     }
 
     @Override
@@ -72,19 +78,25 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeRecyclerAd
             recipeItemView.setText(recipeList.get(listIndex).getRecipeName());
             recipeServing.setText(String.valueOf(recipeList.get(listIndex).getRecipeServings()));
              int recipeId = recipeList.get(listIndex).getRecipeID();
-             switch(recipeId){
-                 case 1:
-                     recipeImageView.setImageResource(R.drawable.nutella_pie);
-                     break;
-                 case 2:
-                     recipeImageView.setImageResource(R.drawable.brownies);
-                     break;
-                 case 3:
-                     recipeImageView.setImageResource(R.drawable.yellow_cake);
-                     break;
-                 case 4:
-                     recipeImageView.setImageResource(R.drawable.cheese_cake);
-                     break;
+             String recipeImage = recipeList.get(listIndex).getImageURL();
+             if(!TextUtils.isEmpty(recipeImage)){
+                 Picasso.with(mContext).load(recipeImage).into(recipeImageView);
+             } else {
+                 switch(recipeId){
+                     case 1:
+                         recipeImageView.setImageResource(R.drawable.nutella_pie);
+                         break;
+                     case 2:
+                         recipeImageView.setImageResource(R.drawable.brownies);
+                         break;
+                     case 3:
+                         recipeImageView.setImageResource(R.drawable.yellow_cake);
+                         break;
+                     case 4:
+                         recipeImageView.setImageResource(R.drawable.cheese_cake);
+                         break;
+                 }
+
              }
 
         }
