@@ -60,6 +60,8 @@ public class VideoDisplayFragment extends Fragment {
     private static final String VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY ="stepslist";
     private static final String VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY ="itemindex";
 
+    Bundle restoreBundle;
+
 
     public VideoDisplayFragment(){}
 
@@ -70,7 +72,7 @@ public class VideoDisplayFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.default_image));
-
+        restoreBundle = savedInstanceState;
         if(savedInstanceState == null){
             Bundle bundle = getArguments();
             if(bundle != null){
@@ -181,6 +183,16 @@ public class VideoDisplayFragment extends Fragment {
             simpleExoPlayer = null;
         }
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(restoreBundle != null){
+            int videoPos = restoreBundle.getInt("VIDEO_POSITION");
+            simpleExoPlayer.seekTo(videoPos);
+        }
 
     }
 

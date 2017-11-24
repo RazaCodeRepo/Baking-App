@@ -58,29 +58,12 @@ public class IngredientListFragment extends Fragment {
                 temp = recipe.getRecipeIngredients();
             }
 
-
-            StringBuilder stringBuilder = new StringBuilder();
-            for(Ingredient s : temp){
-                String one = s.getName();
-                String two = s.getMetric();
-                String three = String.valueOf(s.getQuantity());
-
-                String fullString = one + " " + two + " " + three;
-                stringBuilder.append(fullString);
-                stringBuilder.append("\n");
-            }
-
             Gson gson = new Gson();
             String json = gson.toJson(temp);
-
-            String recipeName = recipe.getRecipeName();
 
             PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putString("SELECTED_INGREDIENT", json).apply();
 
             BakingWidgetProvider.sendRefreshBroadcast(getContext());
-
-
-
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
