@@ -62,8 +62,16 @@ public class VideoDisplayFragment extends Fragment {
 
     Bundle restoreBundle;
 
+    Uri videoURL_Uri;
+
 
     public VideoDisplayFragment(){}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        restoreBundle = savedInstanceState;
+    }
 
     @Nullable
     @Override
@@ -72,7 +80,7 @@ public class VideoDisplayFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.default_image));
-        restoreBundle = savedInstanceState;
+
         if(savedInstanceState == null){
             Bundle bundle = getArguments();
             if(bundle != null){
@@ -81,9 +89,11 @@ public class VideoDisplayFragment extends Fragment {
                 Step temp = steps.get(itemIndex);
                 String videoUrl = temp.getStep_videoURL();
                 String thumbnailUrl = temp.getStep_thumbnail();
+
                 if(!TextUtils.isEmpty(videoUrl)){
                     //thumbnailView.setVisibility(View.GONE);
                     simpleExoPlayerView.setVisibility(View.VISIBLE);
+                    videoURL_Uri = Uri.parse(videoUrl);
                     initializePlayer(Uri.parse(videoUrl), savedInstanceState);
                 } else{
                     thumbnailView.setVisibility(View.VISIBLE);
@@ -96,15 +106,18 @@ public class VideoDisplayFragment extends Fragment {
                 }
 
             } else {
+                restoreBundle = savedInstanceState;
                 Intent intent = getActivity().getIntent();
                 itemIndex = intent.getIntExtra("step_index", 0);
                 steps = intent.getParcelableArrayListExtra("step_list");
                 Step temp = steps.get(itemIndex);
                 String videoUrl = temp.getStep_videoURL();
                 String thumbnailUrl = temp.getStep_thumbnail();
+
                 if(!TextUtils.isEmpty(videoUrl)){
                     //thumbnailView.setVisibility(View.GONE);
                     simpleExoPlayerView.setVisibility(View.VISIBLE);
+                    videoURL_Uri = Uri.parse(videoUrl);
                     initializePlayer(Uri.parse(videoUrl), savedInstanceState);
                 } else{
                     thumbnailView.setVisibility(View.VISIBLE);
@@ -122,9 +135,11 @@ public class VideoDisplayFragment extends Fragment {
             Step temp = steps.get(itemIndex);
             String videoUrl = temp.getStep_videoURL();
             String thumbnailUrl = temp.getStep_thumbnail();
+
             if(!TextUtils.isEmpty(videoUrl)){
                 //thumbnailView.setVisibility(View.GONE);
                 simpleExoPlayerView.setVisibility(View.VISIBLE);
+                videoURL_Uri = Uri.parse(videoUrl);
                 initializePlayer(Uri.parse(videoUrl), savedInstanceState);
             } else{
                 thumbnailView.setVisibility(View.VISIBLE);
@@ -155,6 +170,7 @@ public class VideoDisplayFragment extends Fragment {
             simpleExoPlayer.prepare(mediaSource);
             simpleExoPlayer.setPlayWhenReady(true);
 
+
         } else{
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
@@ -169,6 +185,8 @@ public class VideoDisplayFragment extends Fragment {
 
             simpleExoPlayer.prepare(mediaSource);
             simpleExoPlayer.setPlayWhenReady(true);
+
+
         }
 
     }
@@ -186,13 +204,23 @@ public class VideoDisplayFragment extends Fragment {
 
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
-        if(restoreBundle != null){
-            int videoPos = restoreBundle.getInt("VIDEO_POSITION");
-            simpleExoPlayer.seekTo(videoPos);
-        }
+
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+            simpleExoPlayerView.setPlayer(simpleExoPlayer);
+
+            String userAgent = Util.getUserAgent(getActivity(), "Recipe Video");
+            MediaSource mediaSource = new ExtractorMediaSource(videoURL_Uri, new DefaultDataSourceFactory(getActivity(), userAgent),
+                    new DefaultExtractorsFactory(), null, null);
+            simpleExoPlayer.seekTo(position);
+            simpleExoPlayer.prepare(mediaSource);
+            simpleExoPlayer.setPlayWhenReady(true);
 
     }
 
@@ -215,6 +243,7 @@ public class VideoDisplayFragment extends Fragment {
         outState.putInt(VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY, itemIndex );
         outState.putLong("VIDEO_POSITION", position);
     }
+
 
 
 }
