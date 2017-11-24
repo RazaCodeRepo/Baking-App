@@ -64,22 +64,17 @@ public class VideoDisplayFragment extends Fragment {
 
     Uri videoURL_Uri;
 
+    String videoUrl;
+    String thumbnailUrl;
+
 
     public VideoDisplayFragment(){}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         restoreBundle = savedInstanceState;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_video_display, container, false);
-        ButterKnife.bind(this, rootView);
-
-        simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.default_image));
 
         if(savedInstanceState == null){
             Bundle bundle = getArguments();
@@ -87,72 +82,92 @@ public class VideoDisplayFragment extends Fragment {
                 itemIndex = bundle.getInt("STEP_INDEX_ACTIVITY");
                 steps = bundle.getParcelableArrayList("STEP_LIST_ACTIVITY");
                 Step temp = steps.get(itemIndex);
-                String videoUrl = temp.getStep_videoURL();
-                String thumbnailUrl = temp.getStep_thumbnail();
-
-                if(!TextUtils.isEmpty(videoUrl)){
-                    //thumbnailView.setVisibility(View.GONE);
-                    simpleExoPlayerView.setVisibility(View.VISIBLE);
-                    videoURL_Uri = Uri.parse(videoUrl);
-                    initializePlayer(Uri.parse(videoUrl), savedInstanceState);
-                } else{
-                    thumbnailView.setVisibility(View.VISIBLE);
-                    if(!TextUtils.isEmpty(thumbnailUrl)){
-                        Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
-                    } else {
-                        Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
-                    }
-
-                }
+                videoUrl = temp.getStep_videoURL();
+                thumbnailUrl = temp.getStep_thumbnail();
 
             } else {
-                restoreBundle = savedInstanceState;
+
                 Intent intent = getActivity().getIntent();
                 itemIndex = intent.getIntExtra("step_index", 0);
                 steps = intent.getParcelableArrayListExtra("step_list");
                 Step temp = steps.get(itemIndex);
-                String videoUrl = temp.getStep_videoURL();
-                String thumbnailUrl = temp.getStep_thumbnail();
-
-                if(!TextUtils.isEmpty(videoUrl)){
-                    //thumbnailView.setVisibility(View.GONE);
-                    simpleExoPlayerView.setVisibility(View.VISIBLE);
-                    videoURL_Uri = Uri.parse(videoUrl);
-                    initializePlayer(Uri.parse(videoUrl), savedInstanceState);
-                } else{
-                    thumbnailView.setVisibility(View.VISIBLE);
-                    if(!TextUtils.isEmpty(thumbnailUrl)){
-                        //simpleExoPlayerView.setVisibility(View.GONE);
-                        Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
-                    } else {
-                        Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
-                    }
-                }
+                videoUrl = temp.getStep_videoURL();
+                thumbnailUrl = temp.getStep_thumbnail();
             }
         } else{
             steps = savedInstanceState.getParcelableArrayList(VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY);
             itemIndex = savedInstanceState.getInt(VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY);
             Step temp = steps.get(itemIndex);
-            String videoUrl = temp.getStep_videoURL();
-            String thumbnailUrl = temp.getStep_thumbnail();
-
-            if(!TextUtils.isEmpty(videoUrl)){
-                //thumbnailView.setVisibility(View.GONE);
-                simpleExoPlayerView.setVisibility(View.VISIBLE);
-                videoURL_Uri = Uri.parse(videoUrl);
-                initializePlayer(Uri.parse(videoUrl), savedInstanceState);
-            } else{
-                thumbnailView.setVisibility(View.VISIBLE);
-                if(!TextUtils.isEmpty(thumbnailUrl)){
-                   // simpleExoPlayerView.setVisibility(View.GONE);
-                    Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
-                } else {
-                    Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
-                }
-            }
+            videoUrl = temp.getStep_videoURL();
+            thumbnailUrl = temp.getStep_thumbnail();
         }
 
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        final View rootView = inflater.inflate(R.layout.fragment_video_display, container, false);
+
+        ButterKnife.bind(this, rootView);
+
+        simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.default_image));
+
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if(!TextUtils.isEmpty(videoUrl)){
+            //thumbnailView.setVisibility(View.GONE);
+            simpleExoPlayerView.setVisibility(View.VISIBLE);
+            videoURL_Uri = Uri.parse(videoUrl);
+            initializePlayer(videoURL_Uri, restoreBundle);
+        } else{
+            thumbnailView.setVisibility(View.VISIBLE);
+            if(!TextUtils.isEmpty(thumbnailUrl)){
+                Picasso.with(getContext()).load(thumbnailUrl).placeholder(R.drawable.default_recipe).into(thumbnailView);
+            } else {
+                Picasso.with(getContext()).load(R.drawable.default_recipe).into(thumbnailView);
+            }
+
+        }
+    }
+
+        @Override
+    public void onResume() {
+        super.onResume();
+        if(simpleExoPlayer != null){
+            if(position > 0){
+                simpleExoPlayer.seekTo(position);
+            }
+            simpleExoPlayer.setPlayWhenReady(true);
+        }
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY, (ArrayList)steps);
+        outState.putInt(VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY, itemIndex );
+        outState.putLong("VIDEO_POSITION", position);
     }
 
     private void initializePlayer(Uri uri, Bundle instanceState){
@@ -200,48 +215,6 @@ public class VideoDisplayFragment extends Fragment {
             simpleExoPlayer.release();
             simpleExoPlayer = null;
         }
-
-
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-
-            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
-            simpleExoPlayerView.setPlayer(simpleExoPlayer);
-
-            String userAgent = Util.getUserAgent(getActivity(), "Recipe Video");
-            MediaSource mediaSource = new ExtractorMediaSource(videoURL_Uri, new DefaultDataSourceFactory(getActivity(), userAgent),
-                    new DefaultExtractorsFactory(), null, null);
-            simpleExoPlayer.seekTo(position);
-            simpleExoPlayer.prepare(mediaSource);
-            simpleExoPlayer.setPlayWhenReady(true);
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        releasePlayer();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        releasePlayer();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(VIDEO_FRAGMENT_CLASS_STEPS_INSTANCE_KEY, (ArrayList)steps);
-        outState.putInt(VIDEO_FRAGMENT_CLASS_INDEX_INSTANCE_KEY, itemIndex );
-        outState.putLong("VIDEO_POSITION", position);
     }
 
 
